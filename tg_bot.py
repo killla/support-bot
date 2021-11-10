@@ -12,12 +12,13 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-
 import logging
 
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from environs import Env
+from google.cloud import dialogflow
+
 
 # Enable logging
 logging.basicConfig(
@@ -80,7 +81,6 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
 
     Using the same `session_id` between requests allows continuation
     of the conversation."""
-    from google.cloud import dialogflow
 
     session_client = dialogflow.SessionsClient()
 
