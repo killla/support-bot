@@ -4,11 +4,18 @@ from environs import Env
 import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
 
+from dialog_flow_tools import detect_intent_texts
+
 
 def echo(event, vk_api):
+    project_id = env.str('GOOGLE_PROJECT_ID')
+    session_id = event.user_id
+    language_code = 'ru-RU'
+    reply_text = detect_intent_texts(project_id, session_id, [event.text], language_code)
+
     vk_api.messages.send(
         user_id=event.user_id,
-        message=event.text,
+        message=reply_text,
         random_id=random.randint(1,1000)
     )
 
