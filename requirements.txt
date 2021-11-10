@@ -1,3 +1,4 @@
 environs
 google-cloud-dialogflow
 python-telegram-bot
+vk-api
