@@ -33,7 +33,7 @@ def echo(update: Update, context: CallbackContext) -> None:
     project_id = env.str('GOOGLE_PROJECT_ID')
     session_id = update.effective_chat.id
     language_code = 'ru-RU'
-    reply_text = detect_intent_texts(project_id, session_id, [update.message.text], language_code)
+    reply_text, _ = detect_intent_texts(project_id, session_id, [update.message.text], language_code)
     update.message.reply_text(reply_text)
 
 
