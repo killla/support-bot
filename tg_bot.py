@@ -45,7 +45,11 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
-    update.message.reply_text(update.message.text)
+    project_id = env.str('GOOGLE_PROJECT_ID')
+    session_id = update.effective_chat.id
+    language_code = 'ru-RU'
+    reply_text = detect_intent_texts(project_id, session_id, [update.message.text], language_code)
+    update.message.reply_text(reply_text)
 
 
 def main(token) -> None:
@@ -71,9 +75,35 @@ def main(token) -> None:
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
+def detect_intent_texts(project_id, session_id, texts, language_code):
+    """Returns the result of detect intent with texts as inputs.
+
+    Using the same `session_id` between requests allows continuation
+    of the conversation."""
+    from google.cloud import dialogflow
+
+    session_client = dialogflow.SessionsClient()
+
+    session = session_client.session_path(project_id, session_id)
+    print("Session path: {}\n".format(session))
+
+    for text in texts:
+        text_input = dialogflow.TextInput(text=text, language_code=language_code)
+
+        query_input = dialogflow.QueryInput(text=text_input)
+
+        response = session_client.detect_intent(
+            request={"session": session, "query_input": query_input}
+        )
+
+        return response.query_result.fulfillment_text
+
 
 if __name__ == '__main__':
     env = Env()
     env.read_env()
     tg_bot_token = env.str('TG_BOT_TOKEN')
+    project_id = env.str('GOOGLE_PROJECT_ID')
+    language_code = 'ru-RU'
+
     main(tg_bot_token)

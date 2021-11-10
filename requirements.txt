@@ -1,2 +1,3 @@
 environs
+google-cloud-dialogflow
 python-telegram-bot
