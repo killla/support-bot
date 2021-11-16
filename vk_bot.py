@@ -1,3 +1,4 @@
+import logging.config
 import random
 
 from environs import Env
@@ -5,6 +6,8 @@ import vk_api as vk
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 from dialog_flow_tools import detect_intent_texts
+
+logger = logging.getLogger('telegramLogger')
 
 
 def echo(event, vk_api):
@@ -24,6 +27,14 @@ def echo(event, vk_api):
 if __name__ == "__main__":
     env = Env()
     env.read_env()
+    log_bot_token = env.str('TG_LOG_BOT_TOKEN')
+    tg_chat_id = env.str("TG_LOG_CHAT_ID")
+    logging.config.fileConfig('logging.conf', defaults={
+                    'token': env.str('TG_LOG_BOT_TOKEN'),
+                    'chat_id': env.str("TG_LOG_CHAT_ID")})
+
+    logger.info('start vk_bot')
+
     vk_token = env.str('VK_TOKEN')
     vk_session = vk.VkApi(token=vk_token)
     vk_api = vk_session.get_api()
