@@ -12,7 +12,7 @@ Basic Echobot example, repeats messages.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
-import logging
+import logging.config
 
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
@@ -21,11 +21,7 @@ from environs import Env
 from dialog_flow_tools import detect_intent_texts
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
-)
-
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('telegramLogger')
 
 
 def echo(update: Update, context: CallbackContext) -> None:
@@ -60,6 +56,14 @@ def main(token) -> None:
 if __name__ == '__main__':
     env = Env()
     env.read_env()
+    log_bot_token = env.str('TG_LOG_BOT_TOKEN')
+    tg_chat_id = env.str("TG_LOG_CHAT_ID")
+    logging.config.fileConfig('logging.conf', defaults={
+                    'token': env.str('TG_LOG_BOT_TOKEN'),
+                    'chat_id': env.str("TG_LOG_CHAT_ID")})
+
+    logger.info('start tg_bot')
+
     tg_bot_token = env.str('TG_BOT_TOKEN')
     project_id = env.str('GOOGLE_PROJECT_ID')
     language_code = 'ru-RU'
