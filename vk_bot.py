@@ -41,7 +41,7 @@ if __name__ == "__main__":
     logging.config.fileConfig('logging.conf', defaults={
                     'token': env.str('TG_LOG_BOT_TOKEN'),
                     'chat_id': env.str("TG_LOG_CHAT_ID")})
-    logger.info('start vk_bot')
+    logger.info('VK бот запущен')
 
     vk_token = env.str('VK_TOKEN')
     google_project_id = env.str('GOOGLE_PROJECT_ID')

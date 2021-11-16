@@ -10,7 +10,11 @@ from dialog_flow_tools import detect_intent_texts
 logger = logging.getLogger('telegramLogger')
 
 
-def echo(update: Update, context: CallbackContext) -> None:
+def reply_welcome(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Здравствуйте! Чем могу помочь?')
+
+
+def reply_message(update: Update, context: CallbackContext) -> None:
     reply_text, _ = detect_intent_texts(context.bot_data['google_project_id'],
                                         update.effective_chat.id,
                                         [update.message.text],
@@ -25,8 +29,9 @@ def listen_tg(token, google_project_id) -> None:
     context.bot_data['google_project_id'] = google_project_id
     context.bot_data['language_code'] = 'ru-RU'
 
+    dispatcher.add_handler(CommandHandler("start", reply_welcome))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command,
-                                          echo))
+                                          reply_message))
     updater.start_polling()
     updater.idle()
 
@@ -40,7 +45,7 @@ if __name__ == '__main__':
                     'token': env.str('TG_LOG_BOT_TOKEN'),
                     'chat_id': env.str("TG_LOG_CHAT_ID")})
 
-    logger.info('start tg_bot')
+    logger.info('Телеграм бот запущен')
 
     tg_bot_token = env.str('TG_BOT_TOKEN')
     google_project_id = env.str('GOOGLE_PROJECT_ID')
