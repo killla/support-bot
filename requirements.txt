@@ -1,4 +1,5 @@
-environs
-google-cloud-dialogflow
-python-telegram-bot
-vk-api
+environs==9.3.5
+google-cloud-dialogflow==2.10.0
+python-telegram-bot==13.8.1
+python-telegram-handler==2.2.1
+vk-api==11.9.6
