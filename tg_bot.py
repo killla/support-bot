@@ -1,17 +1,3 @@
-#!/usr/bin/env python
-# pylint: disable=C0116,W0613
-# This program is dedicated to the public domain under the CC0 license.
-
-"""
-Simple Bot to reply to Telegram messages.
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
 import logging.config
 
 from telegram import Update
@@ -25,31 +11,23 @@ logger = logging.getLogger('telegramLogger')
 
 
 def echo(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
-    project_id = env.str('GOOGLE_PROJECT_ID')
-    session_id = update.effective_chat.id
-    language_code = 'ru-RU'
-    reply_text, _ = detect_intent_texts(project_id, session_id, [update.message.text], language_code)
+    reply_text, _ = detect_intent_texts(context.bot_data['google_project_id'],
+                                        update.effective_chat.id,
+                                        [update.message.text],
+                                        context.bot_data['language_code'])
     update.message.reply_text(reply_text)
 
 
-def main(token) -> None:
-    """Start the bot."""
-    # Create the Updater and pass it your bot's token.
+def listen_tg(token, google_project_id) -> None:
     updater = Updater(token)
-
-    # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
+    context = CallbackContext(dispatcher)
+    context.bot_data['google_project_id'] = google_project_id
+    context.bot_data['language_code'] = 'ru-RU'
 
-    # on non command i.e message - echo the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-
-    # Start the Bot
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command,
+                                          echo))
     updater.start_polling()
-
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
 
@@ -65,7 +43,6 @@ if __name__ == '__main__':
     logger.info('start tg_bot')
 
     tg_bot_token = env.str('TG_BOT_TOKEN')
-    project_id = env.str('GOOGLE_PROJECT_ID')
-    language_code = 'ru-RU'
+    google_project_id = env.str('GOOGLE_PROJECT_ID')
 
-    main(tg_bot_token)
+    listen_tg(tg_bot_token, google_project_id)
