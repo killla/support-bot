@@ -16,7 +16,7 @@ def reply_welcome(update: Update, context: CallbackContext) -> None:
 
 def reply_message(update: Update, context: CallbackContext) -> None:
     reply_text, _ = detect_intent_texts(context.bot_data['google_project_id'],
-                                        update.effective_chat.id,
+                                        f'tg-{update.effective_chat.id}',
                                         [update.message.text],
                                         context.bot_data['language_code'])
     update.message.reply_text(reply_text)
