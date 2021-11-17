@@ -22,7 +22,7 @@ def reply_message(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(reply_text)
 
 
-def listen_tg(token, google_project_id) -> None:
+def start_tg_bot(token, google_project_id) -> None:
     updater = Updater(token)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
@@ -50,4 +50,4 @@ if __name__ == '__main__':
     tg_bot_token = env.str('TG_BOT_TOKEN')
     google_project_id = env.str('GOOGLE_PROJECT_ID')
 
-    listen_tg(tg_bot_token, google_project_id)
+    start_tg_bot(tg_bot_token, google_project_id)
