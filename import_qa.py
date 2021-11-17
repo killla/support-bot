@@ -1,4 +1,8 @@
+#!/usr/bin/env python
+
+import argparse
 import json
+from pathlib import Path
 
 from environs import Env
 from google.cloud import dialogflow
@@ -21,16 +25,19 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
         display_name=display_name, training_phrases=training_phrases, messages=[message]
     )
 
-    response = intents_client.create_intent(
+    intents_client.create_intent(
         request={"parent": parent, "intent": intent}
     )
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Импорт вопросов=ответов в DialogFlow')
+    parser.add_argument('filename', help='имя json файла')
+    args = parser.parse_args()
     env = Env()
     env.read_env()
     project_id = env.str('GOOGLE_PROJECT_ID')
-    filename = 'questions.json'
+    filename = Path(args.filename)
     with open(filename, "r") as file:
         entries = json.load(file)
 
