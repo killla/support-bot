@@ -42,7 +42,6 @@ if __name__ == '__main__':
         entries = json.load(file)
 
     for entry, entry_data in entries.items():
-        display_name = entry
         training_phrases_parts = entry_data['questions']
         message_texts = entry_data['answer']
-        create_intent(project_id, display_name, training_phrases_parts, [message_texts])
+        create_intent(project_id, entry, training_phrases_parts, [message_texts])

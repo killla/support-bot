@@ -13,7 +13,7 @@ logger = logging.getLogger('telegramLogger')
 def reply_message(event, vk_api, google_project_id):
     language_code = 'ru-RU'
     reply_text, recognized = detect_intent_texts(google_project_id,
-                                                 f'tg-{event.user_id}',
+                                                 f'vk-{event.user_id}',
                                                  [event.text],
                                                  language_code)
     if recognized:
