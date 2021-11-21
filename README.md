@@ -16,7 +16,7 @@
 - На вкладке `Settings` в разделе `Config Vars` введите свои переменные окружения, которые перечислены в главе [Настройка](#настройка) данного README
 - На вкладке `Settings` в разделе `Buildpacks` добавьте новый билдпак по [ссылке](https://github.com/gerywahyunugraha/heroku-google-application-credentials-buildpack) 
 - На вкладке `Deploy` привяжите свой аккаунт GitHub к аккаунту Heroku
-- В графе `Search for a repository to connect to` выберете свой GitHub аккаунт и репозиторий `dvmn_api`
+- В графе `Search for a repository to connect to` выберете свой GitHub аккаунт и репозиторий `support-bot`
 - Нажмите `Search`, затем `Connect`
 - Нажмите `Deploy Branch`
 - На вкладке `Resources` включите процессы `tg_bot python3 tg_bot.py` и `vk_bot python3 vk_bot.py`
